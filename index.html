@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>How long have America's firms been in business?</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Fauna+One|Playfair+Display:700" rel="stylesheet">
+
+	<!-- Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<!-- D3 -->
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+<body>
+	<div class="container text-center">
+
+		<div class="row">
+			<div class="col-lg-4 my-auto">
+				<h1>How Long Have America's Firms Been in Business?</h1>
+				<div><button type="button" class="btn btn-outline-dark">Show Percentages</button></div>
+			</div>
+			<div class="col-lg-8">
+				<div class="chart" id="all"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-4">
+				<h4>By Gender</h4>
+				<div class="chart" id="male"></div>
+				<div class="chart" id="female"></div>
+			</div>
+			<div class="col-lg-4">
+				<h4>By Veteran Status</h4>
+				<div class="chart" id="veteran"></div>
+				<div class="chart" id="non-veteran"></div>
+			</div>
+			<div class="col-lg-4">
+				<h4>By Ethnicity</h4>
+				<div class="chart" id="hispanic"></div>
+				<div class="chart" id="non-hispanic"></div>
+			</div>
+		</div>
+
+		<h4>By Race</h4>
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="chart" id="white"></div>
+				<div class="chart" id="black"></div>
+			</div>
+			<div class="col-lg-4">
+				<div class="chart" id="asian"></div>
+				<div class="chart" id="native-hawaiian"></div>
+			</div>
+			<div class="col-lg-4">
+				<div class="chart" id="american-indian"></div>
+			</div>
+		</div>
+
+		<footer>Data Source: <a href="https://factfinder.census.gov/faces/tableservices/jsf/pages/productview.xhtml?pid=ASE_2015_00CSA02&prodType=table">United States Census Bureau</a></footer>
+
+	</div>
+	<script src="js/index.js"></script>
+</body>
+</html>
