@@ -1,4 +1,10 @@
 /* jshint esversion: 6 */
+
+///////////////////////////////////////////////////////////////////////////////
+//// Initial Set Up ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Global variables
 const margin = {top: 10, right: 10, bottom: 10, left: 10},
 			width = 360 - margin.left - margin.right,
 			height = 360 - margin.top - margin.bottom,
@@ -24,9 +30,14 @@ const legendTextArc = d3.arc()
 		.outerRadius(radius * 0.9)
 		.innerRadius(radius * 0.9);
 
+// Scale
 const color = d3.scaleOrdinal()
 		.domain(["311", "318", "319", "321", "322", "323"])
 		.range(["#98abc5", "#8a89a6", "#7b6888", "#a05d56", "#d0743c", "#ff8c00"]);
+
+///////////////////////////////////////////////////////////////////////////////
+//// Load and Process Data ////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 d3.csv("data/business.csv", d => {
 	// Shorten years in business lables for display
@@ -52,6 +63,9 @@ d3.csv("data/business.csv", d => {
 
 	loadedData = data;
 
+	/////////////////////////////////////////////////////////////////////////////
+	// Set up SVG container for each pie chart
+
 	const pies = d3.selectAll(".chart")
 	.data(ids)
 	.append("svg")
@@ -74,6 +88,10 @@ d3.csv("data/business.csv", d => {
 	d3.select(".btn").on("click", togglePercentages);
 });
 
+///////////////////////////////////////////////////////////////////////////////
+//// Draw Pie Chart ///////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 function pieChart(id) {
 	// Filter the data with specific id
 	const filtered = loadedData.filter(filterData(id));
@@ -91,6 +109,7 @@ function pieChart(id) {
 
 	const g = d3.select(this);
 
+	/////////////////////////////////////////////////////////////////////////////
 	// Draw pie
 	g.selectAll(".arc")
 		.data(pie(filtered))
@@ -103,6 +122,7 @@ function pieChart(id) {
 			.duration(2000)
 			.attrTween("d", tweenArcs);
 
+	/////////////////////////////////////////////////////////////////////////////
 	// Add title at the center of the pie
 	g.append("text")
 			.attr("class", "title")
@@ -110,6 +130,7 @@ function pieChart(id) {
 			.style("text-anchor", "middle")
 			.text(titleCase(id));
 
+	/////////////////////////////////////////////////////////////////////////////
 	// Add labels to each pie slices and hide them
 	// Show the labels when hover the pie
 	g.selectAll(".label")
@@ -125,12 +146,17 @@ function pieChart(id) {
 			.style("display", "none")
 			.text(d => d3.format(".0%")(d.data.percentage));
 
+	/////////////////////////////////////////////////////////////////////////////
 	// Draw legend and lines for the "All" pie
 	// Start only after the pies have finished rendering
 	if (id === "all") {
 		setTimeout(drawLegend, 2000, g, pie(filtered));
 	}
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//// Legend ///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 function drawLegend(g, arcs) {
 	// Add legend labels
@@ -166,6 +192,32 @@ function drawLegend(g, arcs) {
 
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//// Event Listeners //////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// Toggle display of percentages on each pie slice when click the button
+function togglePercentages() {
+	const button = d3.select(this);
+	if (button.text() === "Show Percentages") {
+		// Show percentages and change button to "Hide Percentages"
+		button.text("Hide Percentages");
+		d3.selectAll(".label")
+				.style("display", "");
+	} else if (button.text() === "Hide Percentages") {
+		// Hide percentages and change button to "Show Percentages"
+		button.text("Show Percentages");
+		d3.selectAll(".label")
+				.style("display", "none");
+	}
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//// Helper Functions /////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// Pie slice transition tween
 function tweenArcs(d) {
 	const interpolator = getArcInterpolator(this, d);
 	return function(t) {
@@ -185,21 +237,8 @@ function getArcInterpolator(el, d) {
 	return interpolator;
 }
 
-function togglePercentages() {
-	const button = d3.select(this);
-	if (button.text() === "Show Percentages") {
-		// Show percentages and change button to "Hide Percentages"
-		button.text("Hide Percentages");
-		d3.selectAll(".label")
-				.style("display", "");
-	} else if (button.text() === "Hide Percentages") {
-		// Hide percentages and change button to "Show Percentages"
-		button.text("Show Percentages");
-		d3.selectAll(".label")
-				.style("display", "none");
-	}
-}
-
+///////////////////////////////////////////////////////////////////////////////
+// Filter data according to the category given by id
 function filterData(id) {
 	return window[(id + "Filter").replace("-", "")];
 }
@@ -300,10 +339,14 @@ function americanindianFilter(el) {
 		el.yearsInBusiness !== "001";
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Calculate the middle angle for lagend text and line positions
 function midAngle(d) {
 		return d.startAngle + (d.endAngle - d.startAngle) / 2;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Change id to title case for displaying in the center of the pie
 function titleCase(title) {
 	return title.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 }
